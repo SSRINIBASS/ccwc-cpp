@@ -1,0 +1,35 @@
+name: C++ Build and Smoke Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Compile with warnings enabled
+        run: g++ -std=c++17 -Wall -Wextra -Wpedantic -Werror main.cpp -o ccwc
+
+      - name: Verify word count from stdin
+        run: |
+          actual=$(printf "one two\nthree\n" | ./ccwc -w)
+          test "$actual" = "3"
+
+      - name: Verify line count from stdin
+        run: |
+          actual=$(printf "one two\nthree\n" | ./ccwc -l)
+          test "$actual" = "2"
+
+      - name: Verify default output
+        run: |
+          actual=$(printf "one two\nthree\n" | ./ccwc)
+          test "$actual" = "2 3 14"
