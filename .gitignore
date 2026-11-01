@@ -1,0 +1,11 @@
+# Compiled output
+ccwc
+*.o
+*.out
+build/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
